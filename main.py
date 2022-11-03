@@ -1,5 +1,7 @@
 import cv2
-
+import compare
+import os
+import time
 if __name__ == '__main__':
     # 定数定義
     ESC_KEY = 27     # Escキー
@@ -39,6 +41,14 @@ if __name__ == '__main__':
             color = (0, 0, 225)
             pen_w = 3
             cv2.rectangle(img_gray, (x, y), (x+w, y+h), color, thickness = pen_w)
+            sampleimg = img[y-10:y+h+10, x-10:x+w+10]
+            cv2.imwrite("out.jpg", sampleimg)
+            got=compare.compare("out.jpg")
+            print ("類似度:"+ str(got))
+            time.sleep(0.3)
+            os.remove("out.jpg")
+            if got<=180:
+                print ("許可された人物ではありません")
 
         # フレーム表示
         cv2.imshow(ORG_WINDOW_NAME, c_frame)
