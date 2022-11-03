@@ -41,15 +41,20 @@ if __name__ == '__main__':
             color = (0, 0, 225)
             pen_w = 3
             cv2.rectangle(img_gray, (x, y), (x+w, y+h), color, thickness = pen_w)
-            sampleimg = img[y-10:y+h+10, x-10:x+w+10]
-            cv2.imwrite("out.jpg", sampleimg)
-            got=compare.compare("out.jpg")
-            print ("類似度:"+ str(got))
-            time.sleep(0.3)
-            os.remove("out.jpg")
-            if got<=180:
-                print ("許可された人物ではありません")
-
+            try:
+                sampleimg = img[y-10:y+h+10, x-10:x+w+10]
+                cv2.imwrite("out.jpg", sampleimg)
+                got=compare.compare("out.jpg")
+                print ("類似度:"+ str(got))
+                time.sleep(0.0001)
+                if got<=100:
+                    print ("許可された人物ではありません")
+            except cv2.error:
+                print("err:CV2.error=画像が読み込めません。対象が視程外に移動したか高速で移動中です")
+                continue
+            except IndexError:
+                print("err:IndexError=タプルの値が不正です。対象は視程の境界上に存在しますが、許可された人物か判定できません")
+                continue
         # フレーム表示
         cv2.imshow(ORG_WINDOW_NAME, c_frame)
         cv2.imshow(GAUSSIAN_WINDOW_NAME, img_gray)
