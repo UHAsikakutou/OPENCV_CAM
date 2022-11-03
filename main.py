@@ -2,6 +2,7 @@ import cv2
 import compare
 import os
 import time
+import winsound
 if __name__ == '__main__':
     # 定数定義
     ESC_KEY = 27     # Escキー
@@ -47,8 +48,9 @@ if __name__ == '__main__':
                 got=compare.compare("out.jpg")
                 print ("類似度:"+ str(got))
                 time.sleep(0.0001)
-                if got<=100:
+                if got<=180:
                     print ("許可された人物ではありません")
+                    winsound.Beep(2000,250)
             except cv2.error:
                 print("err:CV2.error=画像が読み込めません。対象が視程外に移動したか高速で移動中です")
                 continue
